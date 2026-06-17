@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherLens • Drone & High-Zoom Photography</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+            position: relative;
+            background: #111;
+        }
+        
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 1.5s ease-in-out;
+            z-index: -2;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.4) 0%,
+                rgba(0, 0, 0, 0.6) 50%,
+                rgba(0, 0, 0, 0.85) 100%
+            );
+            z-index: -1;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+        
+        .tagline {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            font-weight: 400;
+        }
+        
+        .coming-soon {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 32px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.95rem;
+            opacity: 0.7;
+        }
+        
+        /* Subtle animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content > * {
+            animation: fadeIn 1.2s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image Container -->
+    <div id="background"></div>
+    <div class="overlay"></div>
+    
+    <div class="content">
+        <div class="logo">AETHERLENS</div>
+        <p class="tagline">Drone Cinematography • Extreme Zoom Photography • Capturing the World from Above</p>
+        
+        <div class="coming-soon">Website Coming Soon</div>
+        
+        <p style="max-width: 420px; opacity: 0.8; line-height: 1.6;">
+            Professional aerial and telephoto imagery for real estate, nature, events, and commercial projects.
+        </p>
+        
+        <div class="footer">
+            © 2026 AetherLens Photography • Placeholder Page
+        </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="backgroundAudio" loop></audio>
+
+    <script>
+        // === YOUR PHOTOS (replace these URLs with your own image links) ===
+        const photos = [
+            "https://picsum.photos/id/1015/1920/1080",  // Replace with your drone photo 1
+            "https://picsum.photos/id/1016/1920/1080",  // Replace with your drone photo 2
+            "https://picsum.photos/id/1018/1920/1080",  // Replace with your high-zoom photo 1
+            "https://picsum.photos/id/1020/1920/1080",  // Replace with your high-zoom photo 2
+            "https://picsum.photos/id/1033/1920/1080"   // Add more as needed
+        ];
+        
+        // === YOUR MIDI / AUDIO FILES (replace with direct links to .mp3 or .mid files) ===
+        // Note: Modern browsers have limited native .mid support. Convert MIDIs to MP3 for best results.
+        const tracks = [
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Replace with your track 1
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", // Replace with your track 2
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"  // Add more tracks
+        ];
+        
+        // Random Background Image
+        function setRandomBackground() {
+            const bg = document.getElementById('background');
+            const randomIndex = Math.floor(Math.random() * photos.length);
+            bg.style.backgroundImage = `url('${photos[randomIndex]}')`;
+        }
+        
+        // Random Audio Track
+        function playRandomTrack() {
+            const audio = document.getElementById('backgroundAudio');
+            const randomIndex = Math.floor(Math.random() * tracks.length);
+            
+            audio.src = tracks[randomIndex];
+            audio.volume = 0.35; // Gentle background volume
+            
+            // Play with user gesture handling (browsers require interaction)
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay prevented. Click anywhere to start music.");
+                    // Add click-to-play fallback
+                    document.body.addEventListener('click', () => {
+                        audio.play().catch(() => {});
+                    }, { once: true });
+                });
+            }
+        }
+        
+        // Initialize everything
+        window.onload = function() {
+            setRandomBackground();
+            playRandomTrack();
+            
+            // Optional: Change background every 30 seconds
+            // setInterval(setRandomBackground, 30000);
+        };
+    </script>
+</body>
+</html>
