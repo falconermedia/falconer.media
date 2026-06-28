@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>falconer.media</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400&display=swap');
         
         * {
             margin: 0;
@@ -17,21 +17,18 @@
             font-family: 'Inter', sans-serif;
             height: 100vh;
             overflow: hidden;
+            background: #000;
             color: white;
             position: relative;
-            background: #111;
         }
         
-        #background {
+        #video-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: opacity 1.5s ease-in-out;
+            object-fit: cover;
             z-index: -2;
         }
         
@@ -41,12 +38,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.4) 0%,
-                rgba(0, 0, 0, 0.6) 50%,
-                rgba(0, 0, 0, 0.85) 100%
-            );
+            background: rgba(0, 0, 0, 0.45);
             z-index: -1;
         }
         
@@ -55,134 +47,63 @@
             z-index: 10;
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 2rem;
         }
         
-        .logo {
+        .logo-text {
             font-family: 'Playfair Display', serif;
-            font-size: 4.5rem;
+            font-size: 5.5rem;
             font-weight: 700;
-            letter-spacing: -2px;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            color: #e63939; /* Bold red */
+            text-shadow: 
+                0 0 20px rgba(230, 57, 57, 0.8),
+                0 4px 30px rgba(0, 0, 0, 0.9);
+            letter-spacing: -3px;
+            line-height: 1;
+            user-select: none;
         }
         
-        .tagline {
-            font-size: 1.4rem;
-            margin-bottom: 3rem;
-            opacity: 0.95;
-            max-width: 600px;
-            font-weight: 400;
+        /* Subtle pulse animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.95; }
+            50% { opacity: 1; }
         }
         
-        .coming-soon {
-            background: rgba(255,255,255,0.1);
-            padding: 12px 32px;
-            border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.3);
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 4rem;
+        .logo-text {
+            animation: pulse 4s ease-in-out infinite;
         }
         
-        .footer {
-            position: absolute;
-            bottom: 40px;
-            font-size: 0.95rem;
-            opacity: 0.7;
-        }
-        
-        /* Subtle animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .content > * {
-            animation: fadeIn 1.2s ease forwards;
+        /* Responsive text size */
+        @media (max-width: 768px) {
+            .logo-text {
+                font-size: 3.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Image Container -->
-    <div id="background"></div>
+    <!-- Background Video -->
+    <video id="video-background" autoplay loop muted playsinline>
+        <!-- Replace this with your MP4 URL -->
+        <source src="fox.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
     <div class="overlay"></div>
     
     <div class="content">
-        <div class="logo">falconer.media</div>
-        <p class="tagline"></p>
-        
-        
-        
-        <p style="max-width: 420px; opacity: 0.8; line-height: 1.6;">
-            aerial and telephoto imagery for marketing, events, and site monitoring
-        </p>
-        
-        <div class="footer">
-            
-        </div>
+        <h1 class="logo-text">falconer.media</h1>
     </div>
 
-    <!-- Audio Player -->
-    <audio id="backgroundAudio" loop></audio>
-
     <script>
-        // === YOUR PHOTOS (replace these URLs with your own image links) ===
-        const photos = [
-            "DSCN0661.JPG",  // Replace with your drone photo 1
-            
-        ];
-        
-        // === YOUR MIDI / AUDIO FILES (replace with direct links to .mp3 or .mid files) ===
-        // Note: Modern browsers have limited native .mid support. Convert MIDIs to MP3 for best results.
-        const tracks = [
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Replace with your track 1
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", // Replace with your track 2
-            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"  // Add more tracks
-        ];
-        
-        // Random Background Image
-        function setRandomBackground() {
-            const bg = document.getElementById('background');
-            const randomIndex = Math.floor(Math.random() * photos.length);
-            bg.style.backgroundImage = `url('${photos[randomIndex]}')`;
-        }
-        
-        // Random Audio Track
-        function playRandomTrack() {
-            const audio = document.getElementById('backgroundAudio');
-            const randomIndex = Math.floor(Math.random() * tracks.length);
-            
-            audio.src = tracks[randomIndex];
-            audio.volume = 0.35; // Gentle background volume
-            
-            // Play with user gesture handling (browsers require interaction)
-            const playPromise = audio.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log("Autoplay prevented. Click anywhere to start music.");
-                    // Add click-to-play fallback
-                    document.body.addEventListener('click', () => {
-                        audio.play().catch(() => {});
-                    }, { once: true });
-                });
-            }
-        }
-        
-        // Initialize everything
-        window.onload = function() {
-            setRandomBackground();
-            playRandomTrack();
-            
-            // Optional: Change background every 30 seconds
-            // setInterval(setRandomBackground, 30000);
-        };
+        // Optional: Ensure video restarts smoothly
+        const video = document.getElementById('video-background');
+        video.addEventListener('ended', () => {
+            video.currentTime = 0;
+            video.play();
+        });
     </script>
 </body>
 </html>
